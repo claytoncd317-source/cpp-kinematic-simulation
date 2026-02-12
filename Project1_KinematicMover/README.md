@@ -1,8 +1,16 @@
-\# Kinematic Mover
+\# KinematicMover
 
 
 
-A minimal example of motion integration using a fixed timestep.
+Small deterministic simulation that advances a single body under constant force using a fixed timestep.
+
+
+
+The project isolates the core integration step used inside real-time physics systems without introducing collision solving or constraints.
+
+
+
+---
 
 
 
@@ -10,7 +18,7 @@ A minimal example of motion integration using a fixed timestep.
 
 
 
-Newton’s second law is used as the starting point:
+The motion follows Newton’s second law:
 
 
 
@@ -18,53 +26,95 @@ F = m a
 
 
 
-Mass is set to one, so acceleration is equal to the applied force.
+Mass is set to one, so applied force directly defines acceleration.
 
 
 
-Acceleration describes how velocity changes over time.
+The simulation does not solve this analytically.
 
-Velocity describes how position changes over time.
-
-
-
-Because the program runs in discrete steps, these relationships are integrated numerically.
+Instead, it advances the state numerically at a fixed interval (dt = 0.016 seconds).
 
 
 
-\## Integration Method
+---
 
 
 
-The simulation uses a semi-implicit Euler step.
+\## Integration
 
 
 
-Velocity is updated using the current acceleration and timestep.
-
-Position is then updated using the new velocity.
+A semi-implicit Euler step is used.
 
 
 
-The timestep is fixed at 0.016 seconds to ensure deterministic behavior.
+Velocity is updated from acceleration:
 
 
 
-\## Update Procedure
+v = v + a · dt
 
 
 
-Each simulation step performs the following actions:
+Position is then updated using the new velocity:
 
 
 
-1\. Add any applied forces to the body.
+x = x + v · dt
 
-2\. Update velocity using the accumulated force.
 
-3\. Update position using the new velocity.
 
-4\. Clear the force accumulator.
+This ordering provides better stability than explicit Euler and is commonly used in real-time engines.
+
+
+
+---
+
+
+
+\## Update Step
+
+
+
+Each simulation tick performs:
+
+
+
+1\. Accumulate force
+
+2\. Update velocity
+
+3\. Update position
+
+4\. Clear force accumulator
+
+
+
+Because the timestep is fixed, results are deterministic and independent of frame timing.
+
+
+
+---
+
+
+
+\## Build
+
+
+
+From the Visual Studio 2022 Native Tools prompt:
+
+
+
+cmake -S . -B build -G "Visual Studio 17 2022"
+
+cmake --build build
+
+build\\Debug\\KinematicMover.exe
+
+
+
+---
 
 
 
@@ -72,7 +122,9 @@ Each simulation step performs the following actions:
 
 
 
-This is intentionally small. It demonstrates the structure used inside real-time physics systems without introducing collision solving or constraints.
+This example is intentionally minimal.
+
+It exists as a reference implementation of fixed-step motion integration that larger systems build upon.
 
 
 
