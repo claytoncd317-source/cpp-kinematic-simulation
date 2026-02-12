@@ -95,4 +95,26 @@ Project1_KinematicMover/build/Debug/KinematicMover.exe
 
 ### Build Project 2
 
-cmake -S Project2_ParticleSystemSim
+cmake -S Project2_ParticleSystemSim -B Project2_ParticleSystemSim/build -G "Visual Studio 17 2022"
+cmake --build Project2_ParticleSystemSim/build
+Project2_ParticleSystemSim/build/Debug/ParticleSystemSim.exe
+
+---
+
+## Why These Projects Matter
+
+Real-time simulation systems rarely solve equations analytically.
+Instead, they approximate motion numerically over small timesteps:
+
+state(t + Δt) = state(t) + derivative · Δt
+
+This repository demonstrates that core principle in both:
+
+* A controlled single-body system (Project 1)
+* A scalable particle simulation typical of graphics engines (Project 2)
+
+---
+
+## Author
+
+Clayton Christudass
