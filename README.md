@@ -1,11 +1,11 @@
 # physics-simulation-infrastructure
 
-Small C++ projects exploring fixed-timestep simulation and how those workloads can be packaged and executed in a reproducible environment.
+This repository contains small C++ programs used to study fixed-timestep simulation and how those programs can be packaged and executed as reproducible workloads.
 
-The repository is split into two parts:
+The repository has two main parts:
 
-* `Project*` directories → simulation code
-* `infra/` → containerization and infrastructure for running simulations as jobs
+* The `Project*` directories contain the simulation code.
+* The `infra/` directory will contain container and infrastructure definitions used to run simulations locally or in the cloud.
 
 ---
 
@@ -13,25 +13,25 @@ The repository is split into two parts:
 
 ### Project1_KinematicMover
 
-Single rigid body advanced under constant force using a semi-implicit Euler step.
+Simulates a single body moving under a constant force using a semi-implicit Euler integrator.
 
-Focus:
+This project focuses on:
 
-* Deterministic update loop
-* Force → velocity → position integration
-* Minimal math + state separation
+* A deterministic update loop
+* Numerical integration of motion
+* Clear separation between math types, physical state, and the stepping routine
 
 ### Project2_ParticleSystemSim
 
-Independent particle updates similar to CPU-side work done before GPU particle rendering.
+Simulates many independent particles similar to CPU-side particle updates used before rendering in a graphics engine.
 
-Focus:
+This project focuses on:
 
-* Many-body stepping
-* Gravity, damping, ground constraint
-* Lifetime culling
+* Updating large numbers of simple bodies
+* Gravity, damping, and a ground constraint
+* Lifetime tracking and removal of expired particles
 
-Each project builds independently with CMake.
+Each project builds independently using its own CMake configuration.
 
 ---
 
@@ -40,27 +40,27 @@ Each project builds independently with CMake.
 Requirements:
 
 * Visual Studio 2022
-* CMake ≥ 3.20
+* CMake 3.20 or newer
 
-Use the "x64 Native Tools Command Prompt for VS 2022".
+Use the “x64 Native Tools Command Prompt for VS 2022”.
 
-Example:
+Example build:
 
 cmake -S Project1_KinematicMover -B Project1_KinematicMover/build -G "Visual Studio 17 2022"
 cmake --build Project1_KinematicMover/build
 
 ---
 
-## Infrastructure (in progress)
+## Infrastructure (Work in Progress)
 
-`infra/` will contain:
+The `infra/` directory will contain:
 
-* Docker image definitions for simulation runners
-* Terraform configuration for provisioning compute to execute them
-* Helper scripts for local and remote execution
+* Docker definitions for packaging simulation binaries
+* Terraform configuration for provisioning compute resources
+* Scripts for running batch simulation jobs
 
 ---
 
 ## Intent
 
-The goal is to treat simulation code as a workload that can be executed locally or scheduled remotely, not just as a standalone application.
+The goal is to treat simulation code as a workload that can be executed repeatedly and predictably, not just as a standalone application.

@@ -1,35 +1,78 @@
-# Kinematic Mover
+\# Kinematic Mover
 
-Minimal example of fixed-timestep motion integration.
 
-## Model
 
-Newton's law:
+A minimal example of motion integration using a fixed timestep.
+
+
+
+\## Model
+
+
+
+Newton’s second law is used as the starting point:
+
+
 
 F = m a
 
-With m = 1:
 
-a = F
 
-Discrete update (semi-implicit Euler):
+Mass is set to one, so acceleration is equal to the applied force.
 
-vₙ₊₁ = vₙ + a Δt
-xₙ₊₁ = xₙ + vₙ₊₁ Δt
 
-Δt is fixed at 0.016 s.
 
-## Step
+Acceleration describes how velocity changes over time.
 
-Each update:
+Velocity describes how position changes over time.
 
-1. Accumulate force
-2. Update velocity
-3. Update position
-4. Clear force
 
-## Notes
 
-* Deterministic (no frame-time dependence)
-* Matches the structure used inside real-time physics stepping
-* Intended as a baseline integrator, not a full solver
+Because the program runs in discrete steps, these relationships are integrated numerically.
+
+
+
+\## Integration Method
+
+
+
+The simulation uses a semi-implicit Euler step.
+
+
+
+Velocity is updated using the current acceleration and timestep.
+
+Position is then updated using the new velocity.
+
+
+
+The timestep is fixed at 0.016 seconds to ensure deterministic behavior.
+
+
+
+\## Update Procedure
+
+
+
+Each simulation step performs the following actions:
+
+
+
+1\. Add any applied forces to the body.
+
+2\. Update velocity using the accumulated force.
+
+3\. Update position using the new velocity.
+
+4\. Clear the force accumulator.
+
+
+
+\## Notes
+
+
+
+This is intentionally small. It demonstrates the structure used inside real-time physics systems without introducing collision solving or constraints.
+
+
+
