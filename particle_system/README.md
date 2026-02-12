@@ -1,78 +1,61 @@
-\# Particle System Simulation
+# ParticleSystemSim
 
+Lightweight multi-body simulation similar to the CPU-side update used for real-time particle effects.
 
+The program advances independent particles under simple forces and removes them once their lifetime expires.
 
-A simple multi-body simulation similar to the update stage used for real-time particle effects.
-
-
-
-\## Particle State
-
-
+## State
 
 Each particle stores:
 
+* position
+* velocity
+* remaining lifetime
 
+Particles do not interact with each other. This keeps the system simple and easy to scale.
 
-\* Position
-
-\* Velocity
-
-\* Remaining lifetime
-
-
-
-Particles are updated independently of one another.
-
-
-
-\## Forces and Behavior
-
-
+## Forces
 
 Gravity is applied every step as a constant downward acceleration.
 
+`v = v + g * dt`
 
+Velocity is slightly reduced each frame to approximate drag.
 
-Velocity is reduced slightly each frame to approximate air resistance.
+`v = v * damping`
 
+If a particle moves below the ground plane, its position is clamped and the vertical velocity is reflected with energy loss.
 
+Each particle’s lifetime is reduced by the timestep and the particle is removed once it reaches zero.
 
-If a particle moves below the ground plane, its position is clamped to the ground and its vertical velocity is reflected with some energy loss.
+## Integration
 
+Motion is advanced using the same semi-implicit Euler step as the kinematic example.
 
+Velocity is updated first, then position is updated using the new velocity.
 
-Each particle’s lifetime is reduced by the timestep.
+`x = x + v * dt`
 
-Particles are removed once their lifetime reaches zero.
+## Update Loop
 
+Each frame performs the same sequence:
 
+1. Emit particles
+2. Integrate motion
+3. Apply ground constraint
+4. Age particles
+5. Remove expired particles
 
-\## Update Loop
+## Build
 
+From the Visual Studio Native Tools prompt:
 
+```
+cmake -S . -B build -G "Visual Studio 17 2022"
+cmake --build build
+build\Debug\ParticleSystemSim.exe
+```
 
-The simulation repeatedly:
+## Notes
 
-
-
-\* Spawns new particles
-
-\* Advances their motion
-
-\* Applies constraints
-
-\* Ages them
-
-\* Removes expired particles
-
-
-
-\## Notes
-
-
-
-This mirrors the CPU work typically performed before particle data is uploaded to the GPU for rendering.
-
-
-
+This project focuses only on the simulation stage typically executed before particle data is uploaded to the GPU.
